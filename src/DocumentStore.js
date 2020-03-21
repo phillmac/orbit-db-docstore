@@ -2,6 +2,7 @@
 
 const Store = require('orbit-db-store')
 const DocumentIndex = require('./DocumentIndex')
+const Util = require('./Util')
 const pMap = require('p-map')
 const Readable = require('readable-stream')
 
@@ -65,8 +66,7 @@ class DocumentStore extends Store {
   }
 
   put (doc, options = {}) {
-    if (!doc[this.options.indexBy])
-      throw new Error(`The provided document doesn't contain field '${this.options.indexBy}'`)
+    if (!doc[this.options.indexBy]) { throw new Error(`The provided document doesn't contain field '${this.options.indexBy}'`) }
 
     return this._addOperation({
       op: 'PUT',
@@ -75,9 +75,22 @@ class DocumentStore extends Store {
     }, options)
   }
 
+  putAll (docs, options = {}) {
+    if (!(Array.isArray(docs))) {
+      docs = [docs]
+    }
+    if (!(docs.every(d => d[this.options.indexBy]))) { throw new Error(`The provided document doesn't contain field '${this.options.indexBy}'`) }
+    return this._addOperation({
+      op: 'PUTALL',
+      docs: docs.map((value) => ({
+        key: value[this.options.indexBy],
+        value
+      })).sort(Util.docSort)
+    }, options)
+  }
+
   del (key, options = {}) {
-    if (!this._index.get(key))
-      throw new Error(`No entry with key '${key}' in the database`)
+    if (!this._index.get(key)) { throw new Error(`No entry with key '${key}' in the database`) }
 
     return this._addOperation({
       op: 'DEL',
