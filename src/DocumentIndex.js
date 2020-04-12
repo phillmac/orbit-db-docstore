@@ -17,8 +17,8 @@ class DocumentIndex {
     const reducer = (handled, item, idx) => {
       if (item.payload.op === 'PUTALL') {
         const docsList = item.payload.docs.sort(Util.docSort)
-        console.debug(JSON.stringify(docsList))
         for (const doc of docsList) {
+          console.debug(`document ${JSON.stringify(doc)}`)
           if (handled[doc.key] !== true) {
             handled[doc.key] = true
             this._index[doc.key] = {
