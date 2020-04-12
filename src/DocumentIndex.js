@@ -16,7 +16,9 @@ class DocumentIndex {
   updateIndex (oplog, onProgressCallback) {
     const reducer = (handled, item, idx) => {
       if (item.payload.op === 'PUTALL') {
-        for (const doc of item.payload.docs.sort(Util.docSort)) {
+        const docsList = item.payload.docs.sort(Util.docSort)
+        console.debug(JSON.stringify(docsList)
+        for (const doc of docsList) {
           if (handled[doc.key] !== true) {
             handled[doc.key] = true
             this._index[doc.key] = {
