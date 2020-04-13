@@ -1,7 +1,5 @@
 'use strict'
 
-const Util = require('./Util')
-
 class DocumentIndex {
   constructor () {
     this._index = {}
