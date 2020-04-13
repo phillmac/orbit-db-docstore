@@ -1,7 +1,5 @@
 'use strict'
 
-const Util = require('./Util')
-
 class DocumentIndex {
   constructor () {
     this._index = {}
@@ -16,7 +14,7 @@ class DocumentIndex {
   updateIndex (oplog, onProgressCallback) {
     const reducer = (handled, item, idx) => {
       if (item.payload.op === 'PUTALL') {
-        for (const doc of item.payload.docs.sort(Util.docSort)) {
+        for (const doc of item.payload.docs) {
           if (handled[doc.key] !== true) {
             handled[doc.key] = true
             this._index[doc.key] = {

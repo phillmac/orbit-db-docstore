@@ -2,7 +2,6 @@
 
 const Store = require('orbit-db-store')
 const DocumentIndex = require('./DocumentIndex')
-const Util = require('./Util')
 const pMap = require('p-map')
 const Readable = require('readable-stream')
 
@@ -85,7 +84,7 @@ class DocumentStore extends Store {
       docs: docs.map((value) => ({
         key: value[this.options.indexBy],
         value
-      })).sort(Util.docSort)
+      }))
     }, options)
   }
 
